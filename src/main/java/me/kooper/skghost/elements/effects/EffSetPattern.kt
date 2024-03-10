@@ -5,6 +5,7 @@ import ch.njol.skript.lang.Effect
 import ch.njol.skript.lang.Expression
 import ch.njol.skript.lang.SkriptParser
 import ch.njol.util.Kleenean
+import me.kooper.ghostcore.data.ChunkedViewData
 import me.kooper.ghostcore.data.PatternData
 import me.kooper.ghostcore.data.ViewData
 import me.kooper.ghostcore.models.Stage
@@ -25,7 +26,7 @@ class EffSetPattern : Effect() {
     }
 
     private lateinit var pattern: Expression<String>
-    private lateinit var view: Expression<ViewData>
+    private lateinit var view: Expression<ChunkedViewData>
     private lateinit var stage: Expression<Stage>
 
     override fun toString(event: Event?, debug: Boolean): String {
@@ -49,7 +50,7 @@ class EffSetPattern : Effect() {
         isDelayed: Kleenean?,
         parser: SkriptParser.ParseResult?
     ): Boolean {
-        view = expressions!![0] as Expression<ViewData>
+        view = expressions!![0] as Expression<ChunkedViewData>
         stage = expressions[1] as Expression<Stage>
         pattern = expressions[2] as Expression<String>
         return true

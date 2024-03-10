@@ -6,6 +6,8 @@ import ch.njol.skript.lang.Expression
 import ch.njol.skript.lang.SkriptParser
 import ch.njol.util.Kleenean
 import io.papermc.paper.math.Position
+import me.kooper.ghostcore.data.ChunkedViewData
+import me.kooper.ghostcore.data.SimplePosition
 import me.kooper.ghostcore.data.ViewData
 import me.kooper.ghostcore.models.Stage
 import me.kooper.skghost.SkGhost
@@ -27,7 +29,7 @@ class EffSetAir : Effect() {
     }
 
     private lateinit var location: Expression<Location>
-    private lateinit var view: Expression<ViewData>
+    private lateinit var view: Expression<ChunkedViewData>
     private lateinit var stage: Expression<Stage>
 
     override fun toString(event: Event?, debug: Boolean): String {
@@ -52,7 +54,7 @@ class EffSetAir : Effect() {
         parser: SkriptParser.ParseResult?
     ): Boolean {
         location = expressions!![0] as Expression<Location>
-        view = expressions[1] as Expression<ViewData>
+        view = expressions[1] as Expression<ChunkedViewData>
         stage = expressions[2] as Expression<Stage>
         return true
     }
@@ -64,7 +66,7 @@ class EffSetAir : Effect() {
         Bukkit.getScheduler().runTaskAsynchronously(SkGhost.instance, Runnable {
             run {
                 if (view == null || stage == null || blocks == null) return@Runnable
-                stage.setAirBlocks(view.name, blocks.map { Position.block(it) }.toSet())
+                stage.setAirBlocks(view.name, blocks.map { SimplePosition.from(it.blockX,it.blockY,it.blockZ) }.toSet())
             }
         })
     }

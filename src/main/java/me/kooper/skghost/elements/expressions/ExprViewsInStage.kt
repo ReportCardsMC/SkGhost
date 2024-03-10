@@ -6,11 +6,12 @@ import ch.njol.skript.lang.ExpressionType
 import ch.njol.skript.lang.SkriptParser
 import ch.njol.skript.lang.util.SimpleExpression
 import ch.njol.util.Kleenean
+import me.kooper.ghostcore.data.ChunkedViewData
 import me.kooper.ghostcore.data.ViewData
 import me.kooper.ghostcore.models.Stage
 import org.bukkit.event.Event
 
-class ExprViewsInStage : SimpleExpression<ViewData>() {
+class ExprViewsInStage : SimpleExpression<ChunkedViewData>() {
 
     private lateinit var stage: Expression<Stage>
 
@@ -18,7 +19,7 @@ class ExprViewsInStage : SimpleExpression<ViewData>() {
         init {
             Skript.registerExpression(
                 ExprViewsInStage::class.java,
-                ViewData::class.java, ExpressionType.SIMPLE, "[the] view(s) of stage %stage%", "[stage] %stage%('s) view(s)"
+                ChunkedViewData::class.java, ExpressionType.SIMPLE, "[the] view(s) of stage %stage%", "[stage] %stage%('s) view(s)"
             )
         }
     }
@@ -37,11 +38,11 @@ class ExprViewsInStage : SimpleExpression<ViewData>() {
         return true
     }
 
-    override fun getReturnType(): Class<out ViewData> {
-        return ViewData::class.java
+    override fun getReturnType(): Class<out ChunkedViewData> {
+        return ChunkedViewData::class.java
     }
 
-    override fun get(event: Event?): Array<ViewData?> {
+    override fun get(event: Event?): Array<ChunkedViewData?> {
         if (stage.getSingle(event) == null) return arrayOf(null)
         return stage.getSingle(event)!!.views.values.toTypedArray()
 

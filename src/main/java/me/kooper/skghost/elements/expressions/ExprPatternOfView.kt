@@ -6,6 +6,7 @@ import ch.njol.skript.lang.ExpressionType
 import ch.njol.skript.lang.SkriptParser
 import ch.njol.skript.lang.util.SimpleExpression
 import ch.njol.util.Kleenean
+import me.kooper.ghostcore.data.ChunkedViewData
 import me.kooper.ghostcore.data.ViewData
 import me.kooper.ghostcore.models.Stage
 import me.kooper.skghost.utils.Utils
@@ -13,7 +14,7 @@ import org.bukkit.event.Event
 
 class ExprPatternOfView : SimpleExpression<String>() {
 
-    private lateinit var view: Expression<ViewData>
+    private lateinit var view: Expression<ChunkedViewData>
     private lateinit var stage: Expression<Stage>
 
     companion object {
@@ -31,7 +32,7 @@ class ExprPatternOfView : SimpleExpression<String>() {
 
     @Suppress("UNCHECKED_CAST")
     override fun init(expressions: Array<out Expression<*>>?, matchedPattern: Int, isDelayed: Kleenean?, parser: SkriptParser.ParseResult?): Boolean {
-        view = expressions!![0] as Expression<ViewData>
+        view = expressions!![0] as Expression<ChunkedViewData>
         stage = expressions[1] as Expression<Stage>
         return true
     }
@@ -47,7 +48,7 @@ class ExprPatternOfView : SimpleExpression<String>() {
     override fun get(event: Event?): Array<String?> {
         if (view.getSingle(event) == null || stage.getSingle(event) == null) return arrayOf(null)
         val stage: Stage = stage.getSingle(event)!!
-        val view: ViewData = view.getSingle(event)!!
+        val view: ChunkedViewData = view.getSingle(event)!!
         return arrayOf(Utils.createMaterialValuesString(stage.views[view.name]!!.patternData.blockDataPercentages))
     }
 

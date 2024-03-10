@@ -7,6 +7,7 @@ import ch.njol.skript.lang.SkriptParser
 import ch.njol.util.Kleenean
 import io.papermc.paper.math.Position
 import me.kooper.ghostcore.data.PatternData
+import me.kooper.ghostcore.data.SimplePosition
 import me.kooper.ghostcore.models.Stage
 import me.kooper.skghost.SkGhost
 import me.kooper.skghost.utils.Utils
@@ -70,7 +71,7 @@ class EffCreateView : Effect() {
                 if (stage == null || blocks == null || pattern.getSingle(event) == null) return@Runnable
                 stage.createView(
                     name,
-                    HashSet(blocks.map { Position.block(it) }),
+                    HashSet(blocks.map { SimplePosition.from(it.blockX,it.blockY,it.blockZ) }),
                     PatternData(Utils.parseMaterialValues(pattern.getSingle(event)!!)),
                     breakable
                 )

@@ -7,6 +7,7 @@ import ch.njol.skript.lang.SkriptEvent
 import ch.njol.skript.lang.SkriptParser
 import ch.njol.skript.registrations.EventValues
 import ch.njol.skript.util.Getter
+import me.kooper.ghostcore.data.ChunkedViewData
 import me.kooper.ghostcore.data.ViewData
 import me.kooper.ghostcore.events.GhostBreakEvent
 import me.kooper.ghostcore.models.Stage
@@ -51,8 +52,8 @@ class EvtBlockBreak : SkriptEvent() {
            )
            EventValues.registerEventValue(
                GhostBreakEvent::class.java,
-               ViewData::class.java, object : Getter<ViewData?, GhostBreakEvent?>() {
-                   override operator fun get(e: GhostBreakEvent?): ViewData? {
+               ChunkedViewData::class.java, object : Getter<ChunkedViewData?, GhostBreakEvent?>() {
+                   override operator fun get(e: GhostBreakEvent?): ChunkedViewData? {
                        if (e == null) return null
                        return e.view
                    }

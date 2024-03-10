@@ -7,7 +7,7 @@ import ch.njol.skript.lang.SkriptParser
 import ch.njol.skript.lang.util.SimpleEvent
 import ch.njol.skript.registrations.EventValues
 import ch.njol.skript.util.Getter
-import me.kooper.ghostcore.data.ViewData
+import me.kooper.ghostcore.data.ChunkedViewData
 import me.kooper.ghostcore.events.GhostInteractEvent
 import me.kooper.ghostcore.models.Stage
 import org.bukkit.Location
@@ -49,8 +49,8 @@ class EvtBlockInteract : SimpleEvent() {
             )
             EventValues.registerEventValue(
                 GhostInteractEvent::class.java,
-                ViewData::class.java, object : Getter<ViewData?, GhostInteractEvent?>() {
-                    override operator fun get(e: GhostInteractEvent?): ViewData? {
+                ChunkedViewData::class.java, object : Getter<ChunkedViewData?, GhostInteractEvent?>() {
+                    override operator fun get(e: GhostInteractEvent?): ChunkedViewData? {
                         if (e == null) return null
                         return e.view
                     }

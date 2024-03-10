@@ -7,6 +7,8 @@ import ch.njol.skript.lang.SkriptParser
 import ch.njol.skript.lang.util.SimpleExpression
 import ch.njol.util.Kleenean
 import io.papermc.paper.math.Position
+import me.kooper.ghostcore.data.ChunkedViewData
+import me.kooper.ghostcore.data.SimplePosition
 import me.kooper.ghostcore.data.ViewData
 import org.bukkit.Location
 import org.bukkit.Material
@@ -16,7 +18,7 @@ import org.bukkit.event.Event
 @Suppress("UnstableApiUsage")
 class ExprBlockLocation : SimpleExpression<Material>() {
 
-    private lateinit var view: Expression<ViewData>
+    private lateinit var view: Expression<ChunkedViewData>
     private lateinit var location: Expression<Location>
 
     companion object {
@@ -35,7 +37,7 @@ class ExprBlockLocation : SimpleExpression<Material>() {
     @Suppress("UNCHECKED_CAST")
     override fun init(expressions: Array<out Expression<*>>?, matchedPattern: Int, isDelayed: Kleenean?, parser: SkriptParser.ParseResult?): Boolean {
         location = expressions!![0] as Expression<Location>
-        view = expressions[1] as Expression<ViewData>
+        view = expressions[1] as Expression<ChunkedViewData>
         return true
     }
 
@@ -49,10 +51,15 @@ class ExprBlockLocation : SimpleExpression<Material>() {
 
     override fun get(event: Event?): Array<Material?> {
         if (location.getSingle(event) == null || view.getSingle(event) == null) return arrayOf(null)
-        if (view.getSingle(event)!!.blocks[Position.block(location.getSingle(event)!!)] == null) {
+//        if (view.getSingle(event)!!.blocks[Position.block(location.getSingle(event)!!)] == null) {
+//            return arrayOf(null)
+//        }
+//        return arrayOf(view.getSingle(event)!!.blocks[Position.block(location.getSingle(event)!!)]!!.material)
+        val location = location.getSingle(event)!!
+        if (!view.getSingle(event)!!.hasBlock(SimplePosition.from(location.blockX, location.blockY, location.blockZ))) {
             return arrayOf(null)
         }
-        return arrayOf(view.getSingle(event)!!.blocks[Position.block(location.getSingle(event)!!)]!!.material)
+        return arrayOf(view.getSingle(event)!!.getBlock(SimplePosition.from(location.blockX, location.blockY, location.blockZ))!!.material)
     }
 
 }

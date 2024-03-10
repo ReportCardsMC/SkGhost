@@ -6,6 +6,8 @@ import ch.njol.skript.lang.Expression
 import ch.njol.skript.lang.SkriptParser
 import ch.njol.util.Kleenean
 import io.papermc.paper.math.Position
+import me.kooper.ghostcore.data.ChunkedViewData
+import me.kooper.ghostcore.data.SimplePosition
 import me.kooper.ghostcore.data.ViewData
 import org.bukkit.Location
 import org.bukkit.event.Event
@@ -24,7 +26,7 @@ class CondLocationInView : Condition() {
     }
 
     private lateinit var location: Expression<Location>
-    private lateinit var view: Expression<ViewData>
+    private lateinit var view: Expression<ChunkedViewData>
 
     @Suppress("UNCHECKED_CAST")
     override fun init(
@@ -34,7 +36,7 @@ class CondLocationInView : Condition() {
         parser: SkriptParser.ParseResult?
     ): Boolean {
         location = expressions[0] as Expression<Location>
-        view = expressions[1] as Expression<ViewData>
+        view = expressions[1] as Expression<ChunkedViewData>
         isNegated = parser!!.mark == 1
         return true
     }
@@ -50,7 +52,8 @@ class CondLocationInView : Condition() {
 
     override fun check(event: Event?): Boolean {
         if (location.getSingle(event) == null || view.getSingle(event) == null) return !isNegated
-        return if (view.getSingle(event)!!.blocks[Position.block(location.getSingle(event)!!)] != null) isNegated else !isNegated
+        val loc = location.getSingle(event)!!
+        return if (view.getSingle(event)!!.hasBlock(SimplePosition.from(loc.blockX, loc.blockY, loc.blockZ))) isNegated else !isNegated
     }
 
 }
